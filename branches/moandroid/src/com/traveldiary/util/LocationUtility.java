@@ -1,4 +1,4 @@
-package com.traveldiary.controller;
+package com.traveldiary.util;
 
 import java.util.List;
 
