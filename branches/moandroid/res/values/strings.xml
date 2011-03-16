@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, TravelDiary!</string>
+    <string name="no_locations">No Locations Yet</string>
     <string name="app_name">Travel Diary</string>
+    <string name="menu_take">Take Location</string>
+    <string name="menu_delete">Delete Location</string>
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+    <string name="confirm">Confirm</string>
+    <string name="view_location">View Location</string>
+    <string-array name="locations_array">
+        <item>Berlin</item>
+        <item>Vienna</item>
+        <item>Zurich</item>
+        <item>Tripolis</item>
+    </string-array>
 </resources>
