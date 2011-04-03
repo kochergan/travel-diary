@@ -1,5 +1,9 @@
 package com.traveldiary.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +22,8 @@ import com.traveldiary.pd.Location;
 import com.traveldiary.persistence.Database;
 
 public class LocationEdit extends Activity {
+	private static SimpleDateFormat date_format = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss");
 	private EditText mTitleText;
 	private EditText mBodyText;
 	private TextView mDateText;
@@ -117,8 +123,9 @@ public class LocationEdit extends Activity {
 		startManagingCursor(location);
 		mTitleText.setText(location.getString(location
 				.getColumnIndexOrThrow(Database.KEY_TITLE)));
-		mDateText.setText(location.getString(location
-				.getColumnIndexOrThrow(Database.KEY_DATETIME)));
+		String date = date_format.format(new Date(location.getLong(location
+				.getColumnIndexOrThrow(Database.KEY_DATETIME))));
+		mDateText.setText(date);
 	}
 
 	private void showLocation() {
@@ -146,7 +153,16 @@ public class LocationEdit extends Activity {
 		if (mRowId == null) {
 			String title = mTitleText.getText().toString();
 			String text = mBodyText.getText().toString();
-			long date = Integer.parseInt(mDateText.getText().toString());
+			long date;
+
+			try {
+				date = date_format.parse(mDateText.getText().toString())
+						.getTime();
+			} catch (ParseException e) {
+				Log.w("Problem", "Problem parsing date");
+				date = 0;
+			}
+
 			double latitude = Double.parseDouble(String.valueOf(mLatitudeText
 					.getText()));
 			double longitude = Double.parseDouble(String.valueOf(mLongituteText
