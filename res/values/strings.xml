@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TravelDiary</string>
+    <string name="emptyString"></string>
+    <string name="postTitle">Assign a title for new post</string>
+    <string name="postText">Assign a text for the new post</string>
+    <string name="postPicture">You can make an photo for the new post</string>
+    <string name="defaultTitle">Default Title</string>
+    <string name="defaultText">Default Texr</string>
+    <string name="defaultPath">/mnt/sdcard/DCIM/send/bla.jpg</string>
+    <string name="defaultLat">57.55</string>
+    <string name="defaultLong">88.74</string>
+</resources>
