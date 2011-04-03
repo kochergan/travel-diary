@@ -5,13 +5,13 @@
     <string name="menu_take">Take Location</string>
     <string name="menu_delete">Delete Location</string>
     <string name="title">Title</string>
-    <string name="body">Body</string>
+    <string name="body">Text</string>
+    <string name="date">Date and Time</string>
     <string name="confirm">Confirm</string>
     <string name="view_location">View Location</string>
-    <string-array name="locations_array">
-        <item>Berlin</item>
-        <item>Vienna</item>
-        <item>Zurich</item>
-        <item>Tripolis</item>
-    </string-array>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="location">Location</string>
+    <string name="show_map">Show Map</string>
+    <string name="gps_not_available">GPS not available</string>
 </resources>

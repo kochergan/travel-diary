@@ -61,10 +61,21 @@ public class Database {
 				KEY_DATETIME }, null, null, null, null, KEY_DATETIME);
 	}
 
-	public boolean addLocation(Location loc) {
-		long ret = mDb.insert(TABLE_NAME, null, getContentValues(loc));
+	public Cursor getLocation(long rowId) throws SQLException {
+		Cursor mCursor = mDb.query(true, TABLE_NAME, new String[] { KEY_ROWID,
+				KEY_TITLE, TABLE_NAME }, KEY_ROWID + "=" + rowId, null, null,
+				null, null, null);
 
-		return ret >= 0;
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+		}
+
+		return mCursor;
+	}
+
+	public long addLocation(Location loc) {
+		ContentValues initialValues = getContentValues(loc);
+		return mDb.insert(TABLE_NAME, null, initialValues);
 	}
 
 	public boolean modLocation(Location loc) {
@@ -86,7 +97,7 @@ public class Database {
 
 		values.put(KEY_ROWID, loc.getId());
 		values.put(KEY_TITLE, loc.getTitle());
-		values.put(KEY_DATETIME, loc.getTmstmp().toLocaleString());
+		values.put(KEY_DATETIME, loc.getTmstmp());
 
 		return values;
 	}

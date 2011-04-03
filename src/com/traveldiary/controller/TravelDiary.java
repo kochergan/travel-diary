@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -13,6 +14,8 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import com.traveldiary.bs.HttpRequestPerformer;
+import com.traveldiary.bs.Response;
 import com.traveldiary.pd.Location;
 import com.traveldiary.persistence.Database;
 
@@ -44,12 +47,6 @@ public class TravelDiary extends ListActivity {
 		super.onCreateOptionsMenu(menu);
 		menu.add(0, TAKE_LOCATION_ID, 0, R.string.menu_take);
 		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO react on selected menu items
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -94,18 +91,34 @@ public class TravelDiary extends ListActivity {
 		case DELETE_LOCATION_ID:
 			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 					.getMenuInfo();
-			mDatabase.delLocation(new Location(info.id));
+			Location location = new Location(info.id);
+			deleteInDatabase(location);
+			deleteOnServer(location);
 			fillData();
 			return true;
 		}
 		return super.onContextItemSelected(item);
 	}
 
+	private void deleteOnServer(Location location) {
+		Response response = HttpRequestPerformer.deleteInfo(location);
+
+		if (response == null) {
+			Log.w("Response", "Empty response");
+		} else {
+			Log.i("Response", String.valueOf(response.getStatus()));
+		}
+	}
+
+	private void deleteInDatabase(Location location) {
+		mDatabase.delLocation(location);
+	}
+
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		Intent i = new Intent(this, LocationEdit.class);
-		// TODO store information in intent to show location details
+		i.putExtra(Database.KEY_ROWID, id);
 		startActivityForResult(i, ACTIVITY_EDIT);
 	}
 
