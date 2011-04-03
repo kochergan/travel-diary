@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" android:orientation="vertical">
+    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/etID" android:text="@string/emptyString"></EditText>
+    <EditText android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/etTitle" android:text="@string/defaultTitle"></EditText>
+    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/etText" android:text="@string/defaultText"></EditText>
+    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/etLat" android:text="@string/defaultLat"></EditText>
+    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/etLong" android:text="@string/defaultLong"></EditText>
+    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="TextView" android:id="@+id/tvStatus"></TextView>
+    <EditText android:layout_width="fill_parent" android:id="@+id/etResponse" android:layout_height="fill_parent" android:layout_gravity="top" android:gravity="top" android:text="@string/emptyString"></EditText>
+</LinearLayout>
