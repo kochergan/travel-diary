@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Criteria;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +23,7 @@ import com.traveldiary.bs.Response;
 import com.traveldiary.pd.Location;
 import com.traveldiary.persistence.Database;
 
-public class LocationEdit extends Activity {
+public class LocationEdit extends Activity implements LocationListener {
 	private static SimpleDateFormat date_format = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
 	private EditText mTitleText;
@@ -31,6 +33,8 @@ public class LocationEdit extends Activity {
 	private TextView mLatitudeText;
 	private Long mRowId;
 	private Database mDatabase;
+	private LocationManager mLocationMgr;
+	private String mBest;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,22 +87,35 @@ public class LocationEdit extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+
+		if (isNewLocationState()) {
+			mLocationMgr.removeUpdates(this);
+		}
+
 		saveState();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		if (isNewLocationState()) {
+			mLocationMgr.requestLocationUpdates(mBest, 15000, 1, this);
+		}
+
 		populateFields();
 	}
 
+	private boolean isNewLocationState() {
+		return mRowId == null;
+	}
+
 	private void populateFields() {
-		// edit
-		if (mRowId != null) {
+		if (isNewLocationState()) { // new
+			startLocationRetrieval();
+		} else { // edit
 			showInformationFromDatabase();
 			showInformationFromServer();
-		} else { // new
-			showLocation();
 		}
 	}
 
@@ -128,11 +145,16 @@ public class LocationEdit extends Activity {
 		mDateText.setText(date);
 	}
 
-	private void showLocation() {
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		android.location.Location location = locationManager
-				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+	private void startLocationRetrieval() {
+		mLocationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		Criteria criteria = new Criteria();
+		mBest = mLocationMgr.getBestProvider(criteria, true);
+		android.location.Location location = mLocationMgr
+				.getLastKnownLocation(mBest);
+		showLocationInformation(location);
+	}
 
+	private void showLocationInformation(android.location.Location location) {
 		if (location != null) {
 			double lat = location.getLatitude();
 			double lng = location.getLongitude();
@@ -145,7 +167,7 @@ public class LocationEdit extends Activity {
 	}
 
 	private void showLocationOnMap() {
-		Intent i = new Intent(this, Pathfinder.class);
+		Intent i = new Intent(this, com.traveldiary.controller.Pathfinder.class);
 		startActivity(i);
 	}
 
@@ -181,5 +203,21 @@ public class LocationEdit extends Activity {
 
 			mDatabase.addLocation(response.getLocation());
 		}
+	}
+
+	public void onLocationChanged(android.location.Location location) {
+		showLocationInformation(location);
+	}
+
+	public void onProviderDisabled(String provider) {
+		Log.i("Location", "Provider disabled: " + provider);
+	}
+
+	public void onProviderEnabled(String provider) {
+		Log.i("Location", "Provider enabled: " + provider);
+	}
+
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		Log.i("Location", "Status changed: " + provider);
 	}
 }
