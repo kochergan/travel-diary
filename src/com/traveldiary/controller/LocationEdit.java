@@ -74,6 +74,7 @@ public class LocationEdit extends Activity implements LocationListener {
 			mRowId = extras != null ? extras.getLong(Database.KEY_ROWID) : null;
 		}
 
+		startLocationRetrieval();
 		populateFields();
 	}
 
@@ -111,12 +112,17 @@ public class LocationEdit extends Activity implements LocationListener {
 	}
 
 	private void populateFields() {
-		if (isNewLocationState()) { // new
-			startLocationRetrieval();
-		} else { // edit
+		if (!isNewLocationState()) {
 			showInformationFromDatabase();
 			showInformationFromServer();
+		} else {
+			showCurrentTime();
 		}
+	}
+
+	private void showCurrentTime() {
+		String date = date_format.format(new Date());
+		mDateText.setText(date);
 	}
 
 	private void showInformationFromServer() {
