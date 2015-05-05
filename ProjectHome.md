@@ -1,0 +1,1 @@
+This Android application allows a user to associate pictures and text with geolocations and to share them with friends.
